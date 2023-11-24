@@ -1,12 +1,8 @@
-let x: number = 2
-let y: number = 4
-let z: number
+import Block from "./block"
 
-function somar(n1: number, n2: number) {
-  return n1 + n2
-}
+let block1 = new Block(2, "HackThePlanet")
+// block1.index = 2
+// block1.hash = "HackThePlanet"
 
-z = somar(x, y)
-
-console.log(z)
-console.log("Hack The Planet! XD")
+console.log(block1)
+console.log(block1.isValid())
