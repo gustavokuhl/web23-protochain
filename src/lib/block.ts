@@ -34,12 +34,13 @@ export default class Block {
    * Verify if the blockchain is valid
    * @returns Return true if the block is valid
    */
-  isValid(): boolean {
-    if (this.index < 0) return false
-    if (!this.hash) return false
+  isValid(previousHash: string, previousIndex: number): boolean {
+    if (this.hash !== this.getHash()) return false
+    if (previousIndex !== this.index - 1) return false
     if (!this.data) return false
     if (this.timestamp < 1) return false
     if (!this.previousHash) return false
+    if (previousHash !== this.previousHash) return false
     return true
   }
 }
