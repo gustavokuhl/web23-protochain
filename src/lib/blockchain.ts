@@ -10,7 +10,7 @@ export default class Blockchain {
    * Creates a new Blockchain
    */
   constructor() {
-    let block = new Block(0, "genesis")
+    let block = new Block(0, "", "Genesis Block")
     this.blocks = [block]
   }
 }
