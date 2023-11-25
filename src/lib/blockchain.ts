@@ -1,8 +1,10 @@
 import Block from "./block"
 
-let block1 = new Block(2, "HackThePlanet")
-// block1.index = 2
-// block1.hash = "HackThePlanet"
+export default class Blockchain {
+  blocks: Block[]
 
-console.log(block1)
-console.log(block1.isValid())
+  constructor() {
+    let block = new Block(0, "genesis")
+    this.blocks = [block]
+  }
+}
