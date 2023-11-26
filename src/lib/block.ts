@@ -2,7 +2,7 @@ import sha256 from "crypto-js/sha256"
 import Validation from "./validation"
 
 /**
- * Black class
+ * Block class
  */
 export default class Block {
   index: number
@@ -30,7 +30,7 @@ export default class Block {
   }
 
   /**
-   * Verify if the blockchain is valid
+   * Verify if the block is valid
    * @returns Return true if the block is valid
    */
   isValid(previousHash: string, previousIndex: number): Validation {
