@@ -70,8 +70,8 @@ export default class Blockchain {
    * @returns A Block if the hash exists in the blockchain, and a undefined value if doesn't
    */
   getBlock(hash: string): Block | undefined {
-    return this.blocks.find((b) => b.hash === hash)
     this.isValid()
+    return this.blocks.find((b) => b.hash === hash)
   }
 
   /**
