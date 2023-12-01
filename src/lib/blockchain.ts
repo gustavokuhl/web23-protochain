@@ -26,14 +26,27 @@ export default class Blockchain {
     this.nextIndex++
   }
 
+  /**
+   * Get blockchain last block
+   * @returns A block object
+   */
   getLastBlock(): Block {
     return this.blocks[this.blocks.length - 1]
   }
 
+  /**
+   * Get blockchain current difficulty
+   * @returns The difficulty value
+   */
   getDifficulty(): number {
     return Math.ceil(this.blocks.length / Blockchain.DIFFICULTY_FACTOR)
   }
 
+  /**
+   * Adds a block to the blockchain
+   * @param block A valid block object to be added
+   * @returns A Validation indicating success or failure. Returns a message if the block if invalid.
+   */
   addBlock(block: Block): Validation {
     const lastBlock = this.getLastBlock()
 
@@ -51,10 +64,20 @@ export default class Blockchain {
     return new Validation()
   }
 
+  /**
+   * Gets a blockchain block by the hash value
+   * @param hash A sha256 hash of a valid block
+   * @returns A Block if the hash exists in the blockchain, and a undefined value if doesn't
+   */
   getBlock(hash: string): Block | undefined {
     return this.blocks.find((b) => b.hash === hash)
+    this.isValid()
   }
 
+  /**
+   * Verifies if the blockchain is valid
+   * @returns A Validation indicating success or failure. Returns a message if the block if invalid.
+   */
   isValid(): Validation {
     for (let i = this.blocks.length - 1; i > 0; i--) {
       const currentBlock = this.blocks[i]
@@ -73,10 +96,18 @@ export default class Blockchain {
     return new Validation()
   }
 
+  /**
+   * Gets the blockchain fee per transaction value
+   * @returns The fee value
+   */
   getFeePerTx(): number {
     return 1
   }
 
+  /**
+   * Gets the blockchain next block info
+   * @returns The block info
+   */
   getNextBlock(): BlockInfo {
     const data = new Date().toString()
     const difficulty = this.getDifficulty()
