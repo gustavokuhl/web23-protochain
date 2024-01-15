@@ -116,7 +116,11 @@ export default class Blockchain {
    * @returns The block info
    */
   getNextBlock(): BlockInfo {
-    const transactions = [] as Transaction[]
+    const transactions = [
+      new Transaction({
+        data: new Date().toString(),
+      } as Transaction),
+    ]
     const difficulty = this.getDifficulty()
     const previousHash = this.getLastBlock().hash
     const index = this.blocks.length
