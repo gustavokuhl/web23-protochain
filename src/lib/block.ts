@@ -73,19 +73,22 @@ export default class Block {
     previousIndex: number,
     difficulty: number
   ): Validation {
-    if (
-      this.transactions.filter((tx) => tx.type === TransactionType.FEE).length >
-      1
-    )
-      return new Validation(false, "Too many fee transactions.")
-
-    const validations = this.transactions.map((tx) => tx.isValid())
-    const errors = validations.filter((v) => !v.success).map((v) => v.message)
-    if (errors.length > 0)
-      return new Validation(
-        false,
-        "Invalid block due to invalid tsx(s):" + errors.reduce((a, b) => a + b)
+    if (this.transactions && this.transactions.length) {
+      if (
+        this.transactions.filter((tx) => tx.type === TransactionType.FEE)
+          .length > 1
       )
+        return new Validation(false, "Too many fee transactions.")
+
+      const validations = this.transactions.map((tx) => tx.isValid())
+      const errors = validations.filter((v) => !v.success).map((v) => v.message)
+      if (errors.length > 0)
+        return new Validation(
+          false,
+          "Invalid block due to invalid tsx(s):" +
+            errors.reduce((a, b) => a + b)
+        )
+    }
 
     if (previousIndex !== this.index - 1)
       return new Validation(false, "Invalid index.")
