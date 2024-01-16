@@ -25,7 +25,7 @@ export default class Block {
     this.timestamp = block?.timestamp || Date.now()
     this.previousHash = block?.previousHash || ""
     this.transactions = block?.transactions
-      ? block?.transactions.map((tx) => new Transaction(tx))
+      ? block.transactions.map((tx) => new Transaction(tx))
       : ([] as Transaction[])
     this.nonce = block?.nonce || 0
     this.miner = block?.miner || ""
@@ -34,8 +34,9 @@ export default class Block {
 
   getHash(): string {
     const tsx =
-      (this.transactions && this.transactions.length) ??
-      this.transactions.map((tx) => tx.hash).reduce((a, b) => a + b)
+      this.transactions && this.transactions.length
+        ? this.transactions.map((tx) => tx.hash).reduce((a, b) => a + b)
+        : ""
     return sha256(
       this.index +
         tsx +
