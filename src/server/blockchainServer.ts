@@ -3,8 +3,9 @@ dotenv.config()
 
 import express, { NextFunction, Request, Response } from "express"
 import morgan from "morgan"
-import Blockchain from "../lib/blockchain"
 import Block from "../lib/block"
+import Blockchain from "../lib/blockchain"
+import Transaction from "../lib/transaction"
 
 /* c8 ignore next */
 const PORT: number = parseInt(`${process.env.BLOCKCHAIN_PORT || 3000}`)
@@ -50,6 +51,23 @@ app.post("/blocks", (req: Request, res: Response, next: NextFunction) => {
   const validation = blockchain.addBlock(block)
 
   if (validation.success) res.status(201).json(block)
+  else res.status(400).json(validation)
+})
+
+app.get("/transactions", (req: Request, res: Response, next: NextFunction) => {
+  return res.json({
+    next: blockchain.mempool.slice(0, Blockchain.TX_PER_BLOCK),
+    total: blockchain.mempool.length,
+  })
+})
+
+app.post("/transactions", (req: Request, res: Response, next: NextFunction) => {
+  if (req.body.hash === undefined) return res.sendStatus(422)
+
+  const tx = new Transaction(req.body as Transaction)
+  const validation = blockchain.addTransaction(tx)
+
+  if (validation.success) res.status(201).json(tx)
   else res.status(400).json(validation)
 })
 
