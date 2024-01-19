@@ -1,7 +1,7 @@
 import request from "supertest"
-import { app } from "../src/server/blockchainServer"
 import Block from "../src/lib/block"
-import block from "../src/lib/block"
+import Transaction from "../src/lib/transaction"
+import { app } from "../src/server/blockchainServer"
 
 jest.mock("../src/lib/block")
 jest.mock("../src/lib/blockchain")
@@ -62,5 +62,48 @@ describe("BlockchainServer Test", () => {
     } as Block)
     const response = await request(app).post("/blocks").send(block)
     expect(response.status).toEqual(400)
+  })
+
+  test("GET /transactions/:hash - Should get transaction", async () => {
+    const response = await request(app).get("/transactions/genesis")
+    expect(response.status).toEqual(200)
+    expect(response.body.mempoolIndex).toEqual(0)
+  })
+
+  test("GET /transactions/ - Should get next transactions", async () => {
+    const response = await request(app).get("/transactions")
+    expect(response.status).toEqual(200)
+    expect(response.body.total).toEqual(0)
+  })
+
+  test("POST /transactions - Should add transaction", async () => {
+    const tx = new Transaction({
+      data: "tx1",
+    } as Transaction)
+
+    const response = await request(app).post("/transactions/").send(tx)
+    expect(response.status).toEqual(201)
+  })
+
+  test("POST /transactions - Should NOT add transaction (data)", async () => {
+    const tx = new Transaction({
+      data: "",
+    } as Transaction)
+
+    const response = await request(app).post("/transactions/").send(tx)
+
+    expect(response.status).toEqual(400)
+    expect(response.body.success).toBeFalsy()
+  })
+
+  test("POST /transactions - Should NOT add transaction (hash)", async () => {
+    const tx = {
+      data: "tx1",
+    } as Transaction
+
+    const response = await request(app).post("/transactions/").send(tx)
+
+    expect(response.status).toEqual(422)
+    expect(response.body.success).toBeFalsy()
   })
 })

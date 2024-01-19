@@ -1,4 +1,5 @@
 import BlockInfo from "../blockInfo"
+import TransactionSearch from "../transactionSearch"
 import { TransactionType } from "../transactionType"
 import Validation from "../validation"
 import Block from "./block"
@@ -16,7 +17,7 @@ export default class Blockchain {
    * Creates a new Mocked Blockchain
    */
   constructor() {
-    this.mempool = [] as Transaction[]
+    this.mempool = []
     this.blocks = [
       new Block({
         index: 0,
@@ -26,6 +27,7 @@ export default class Blockchain {
           new Transaction({
             type: TransactionType.FEE,
             data: "Genesis Block",
+            hash: "genesis",
           } as Transaction),
         ],
         timestamp: Date.now(),
@@ -73,5 +75,22 @@ export default class Blockchain {
       feePerTx: this.getFeePerTx(),
       maxDifficulty: 62,
     } as BlockInfo
+  }
+
+  addTransaction(transaction: Transaction): Validation {
+    const validation = transaction.isValid()
+    if (!validation.success) return validation
+
+    this.mempool.push(transaction)
+    return new Validation()
+  }
+
+  getTransaction(hash: string): TransactionSearch {
+    return {
+      mempoolIndex: 0,
+      transaction: {
+        hash,
+      },
+    } as TransactionSearch
   }
 }
