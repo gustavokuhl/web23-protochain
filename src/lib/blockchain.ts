@@ -114,25 +114,25 @@ export default class Blockchain {
 
   getTransaction(hash: string): TransactionSearch {
     const mempoolIndex = this.mempool.findIndex((tx) => tx.hash === hash)
-    if (mempoolIndex)
+    if (mempoolIndex !== -1)
       return {
         mempoolIndex,
-        blockIndex: -1,
         transaction: this.mempool[mempoolIndex],
-      }
+      } as TransactionSearch
 
-    const blockIndex = this.blocks.findIndex((tx) => tx.hash === hash)
-    if (blockIndex)
+    const blockIndex = this.blocks.findIndex((b) =>
+      b.transactions.some((tx) => tx.hash === hash)
+    )
+    if (blockIndex !== -1) {
       return {
         blockIndex,
-        mempoolIndex: -1,
-        transaction: this.mempool[mempoolIndex],
-      }
+        transaction: this.blocks[blockIndex].transactions.find(
+          (tx) => tx.hash === hash
+        ),
+      } as TransactionSearch
+    }
 
-    return {
-      blockIndex: -1,
-      mempoolIndex: -1,
-    } as TransactionSearch
+    return { blockIndex: -1, mempoolIndex: -1 } as TransactionSearch
   }
 
   /**

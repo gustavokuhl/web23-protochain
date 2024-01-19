@@ -9,12 +9,14 @@ import Transaction from "./transaction"
  */
 export default class Blockchain {
   blocks: Block[]
+  mempool: Transaction[]
   nextIndex: number = 0
 
   /**
    * Creates a new Mocked Blockchain
    */
   constructor() {
+    this.mempool = [] as Transaction[]
     this.blocks = [
       new Block({
         index: 0,
