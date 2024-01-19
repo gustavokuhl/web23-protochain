@@ -2,8 +2,8 @@ import dotenv from "dotenv"
 dotenv.config()
 
 import axios from "axios"
-import BlockInfo from "../lib/blockInfo"
 import Block from "../lib/block"
+import BlockInfo from "../lib/blockInfo"
 
 const BLOCKCHAIN_SERVER = process.env.BLOCKCHAIN_SERVER
 
@@ -19,6 +19,13 @@ async function mine() {
   console.log("Getting next block info...")
 
   const { data } = await axios.get(`${BLOCKCHAIN_SERVER}blocks/next`)
+  if (!data) {
+    console.log("No tx found. Waiting...")
+    return setTimeout(() => {
+      mine()
+    }, 5000)
+  }
+
   const blockInfo = data as BlockInfo
 
   const newBlock = Block.fromBlockInfo(blockInfo)
