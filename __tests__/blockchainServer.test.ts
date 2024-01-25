@@ -86,7 +86,6 @@ describe("BlockchainServer Test", () => {
     } as Transaction)
 
     const response = await request(app).post("/transactions/").send(tx)
-    console.log(response.body)
     expect(response.status).toEqual(201)
   })
 
@@ -105,7 +104,7 @@ describe("BlockchainServer Test", () => {
     const tx = {} as Transaction
     const response = await request(app).post("/transactions/").send(tx)
 
-    expect(response.status).toEqual(400)
+    expect(response.status).toEqual(422)
     expect(response.body.success).toBeFalsy()
   })
 })
