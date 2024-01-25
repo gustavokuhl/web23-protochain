@@ -149,6 +149,7 @@ describe("Block tests", () => {
       transactions: [
         new Transaction({
           txInput: new TransactionInput(),
+          to: "toAddrres",
         } as Transaction),
       ],
     } as Block)
@@ -157,6 +158,7 @@ describe("Block tests", () => {
     block.hash = ""
 
     const valid = block.isValid(genesis.hash, genesis.index, exampleDifficulty)
+    console.log(valid)
     expect(valid.success).toBeFalsy()
   })
 
