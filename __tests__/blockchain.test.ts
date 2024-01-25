@@ -53,7 +53,7 @@ describe("Blockchain tests", () => {
     expect(blockchain.isValid().success).toEqual(false)
   })
 
-  test.only("Should add transaction", () => {
+  test("Should add transaction", () => {
     const blockchain = new Blockchain()
 
     const tx = new Transaction({
