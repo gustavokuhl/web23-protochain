@@ -86,17 +86,26 @@ describe("BlockchainServer Test", () => {
     } as Transaction)
 
     const response = await request(app).post("/transactions/").send(tx)
+    console.log(response.body)
     expect(response.status).toEqual(201)
   })
 
-  test("POST /transactions - Should NOT add transaction (hash)", async () => {
-    const tx = {
+  test("POST /transactions - Should NOT add transaction (invalid tx)", async () => {
+    const tx = new Transaction({
       txInput: new TransactionInput(),
-    } as Transaction
+    } as Transaction)
 
     const response = await request(app).post("/transactions/").send(tx)
 
-    expect(response.status).toEqual(422)
+    expect(response.status).toEqual(400)
+    expect(response.body.success).toBeFalsy()
+  })
+
+  test("POST /transactions - Should NOT add transaction (empty tx)", async () => {
+    const tx = {} as Transaction
+    const response = await request(app).post("/transactions/").send(tx)
+
+    expect(response.status).toEqual(400)
     expect(response.body.success).toBeFalsy()
   })
 })

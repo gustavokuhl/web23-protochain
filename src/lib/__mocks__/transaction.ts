@@ -15,7 +15,7 @@ export default class Transaction {
   constructor(tx?: Transaction) {
     this.type = tx?.type || TransactionType.REGULAR
     this.timestamp = tx?.timestamp || Date.now()
-    this.to = tx?.to || "toAddress"
+    this.to = tx?.to || ""
     this.txInput = tx?.txInput
       ? new TransactionInput(tx?.txInput)
       : new TransactionInput()
