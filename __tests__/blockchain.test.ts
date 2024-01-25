@@ -58,6 +58,7 @@ describe("Blockchain tests", () => {
 
     const tx = new Transaction({
       txInput: new TransactionInput({ amount: 13 } as TransactionInput),
+      to: "toAddrres",
     } as Transaction)
     tx.hash = "123"
 
@@ -100,6 +101,7 @@ describe("Blockchain tests", () => {
     const tx = new Transaction({
       hash: "xyz",
       txInput: new TransactionInput(),
+      to: "toAddrres",
     } as Transaction)
     blockchain.addTransaction(tx)
 
@@ -192,6 +194,7 @@ describe("Blockchain tests", () => {
     const tx = new Transaction({
       hash: "xyz",
       txInput: new TransactionInput(),
+      to: "toAddrres",
     } as Transaction)
 
     const valid = blockchain.addTransaction(tx)
