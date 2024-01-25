@@ -86,6 +86,7 @@ describe("Blockchain tests", () => {
 
     const tx = new Transaction({
       txInput: new TransactionInput(),
+      hash: "xyz",
     } as Transaction)
     blockchain.mempool.push(tx)
 
