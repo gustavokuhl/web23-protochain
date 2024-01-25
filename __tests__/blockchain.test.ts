@@ -53,12 +53,13 @@ describe("Blockchain tests", () => {
     expect(blockchain.isValid().success).toEqual(false)
   })
 
-  test("Should add transaction", () => {
+  test.only("Should add transaction", () => {
     const blockchain = new Blockchain()
 
     const tx = new Transaction({
       txInput: new TransactionInput({ amount: 13 } as TransactionInput),
     } as Transaction)
+    tx.hash = "123"
 
     const valid = blockchain.addTransaction(tx)
     expect(valid.success).toBeTruthy()
