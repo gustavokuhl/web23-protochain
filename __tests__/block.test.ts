@@ -127,14 +127,16 @@ describe("Block tests", () => {
   })
 
   test("Should be falsy (transactions)", () => {
+    const tx = new Transaction()
+
     const block = new Block({
       index: 1,
       previousHash: genesis.hash,
-      transactions: [new Transaction({ to: "" } as Transaction)],
+      transactions: [tx],
     } as Block)
 
-    block.transactions[0].hash = "teste"
     block.mine(exampleDifficulty, exampleMiner)
+    block.transactions[0].to = ""
 
     const valid = block.isValid(genesis.hash, genesis.index, exampleDifficulty)
     expect(valid.success).toBeFalsy()
