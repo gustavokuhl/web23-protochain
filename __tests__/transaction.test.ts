@@ -1,7 +1,10 @@
 import { describe } from "@jest/globals"
 import Block from "../src/lib/block"
 import Transaction from "../src/lib/transaction"
+import TransactionInput from "../src/lib/transactionInput"
 import { TransactionType } from "../src/lib/transactionType"
+
+jest.mock("../src/lib/transactionInput")
 
 describe("Block tests", () => {
   const exampleDifficulty = 0
@@ -10,7 +13,8 @@ describe("Block tests", () => {
 
   test("Should be a valid block", () => {
     const tx = new Transaction({
-      data: "tx",
+      txInput: new TransactionInput(),
+      to: "toAddress",
     } as Transaction)
 
     const valid = tx.isValid()
@@ -19,7 +23,8 @@ describe("Block tests", () => {
 
   test("Should be a valid block", () => {
     const tx = new Transaction({
-      data: "tx",
+      txInput: new TransactionInput(),
+      to: "toAddress",
       type: TransactionType.FEE,
     } as Transaction)
 
@@ -29,7 +34,8 @@ describe("Block tests", () => {
 
   test("Should not be a valid block (hash)", () => {
     const tx = new Transaction({
-      data: "tx",
+      txInput: new TransactionInput(),
+      to: "toAddress",
       type: TransactionType.FEE,
       timestamp: Date.now(),
       hash: "abc",

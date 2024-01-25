@@ -4,6 +4,7 @@ import { TransactionType } from "../transactionType"
 import Validation from "../validation"
 import Block from "./block"
 import Transaction from "./transaction"
+import TransactionInput from "./transactionInput"
 
 /**
  * Mocked Blockchain class
@@ -26,7 +27,7 @@ export default class Blockchain {
         transactions: [
           new Transaction({
             type: TransactionType.FEE,
-            data: "Genesis Block",
+            txInput: new TransactionInput(),
             hash: "genesis",
           } as Transaction),
         ],
@@ -66,7 +67,7 @@ export default class Blockchain {
     return {
       transactions: [
         new Transaction({
-          data: new Date().toString(),
+          txInput: new TransactionInput(),
         } as Transaction),
       ],
       difficulty: 0,

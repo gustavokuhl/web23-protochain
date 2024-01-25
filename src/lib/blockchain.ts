@@ -1,3 +1,4 @@
+import TransactionInput from "./__mocks__/transactionInput"
 import Block from "./block"
 import BlockInfo from "./blockInfo"
 import Transaction from "./transaction"
@@ -28,7 +29,7 @@ export default class Blockchain {
         transactions: [
           new Transaction({
             type: TransactionType.FEE,
-            data: new Date().toString(),
+            txInput: new TransactionInput(),
           } as Transaction),
         ],
       } as Block),
@@ -117,6 +118,7 @@ export default class Blockchain {
     if (mempoolIndex !== -1)
       return {
         mempoolIndex,
+        blockIndex: -1,
         transaction: this.mempool[mempoolIndex],
       } as TransactionSearch
 
@@ -126,6 +128,7 @@ export default class Blockchain {
     if (blockIndex !== -1) {
       return {
         blockIndex,
+        mempoolIndex: -1,
         transaction: this.blocks[blockIndex].transactions.find(
           (tx) => tx.hash === hash
         ),

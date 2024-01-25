@@ -10,21 +10,22 @@ export default class Transaction {
   type: TransactionType
   timestamp: number
   hash: string
-  txInput: TransactionInput
   to: string
+  txInput: TransactionInput | undefined
 
   constructor(tx?: Transaction) {
     this.type = tx?.type || TransactionType.REGULAR
     this.timestamp = tx?.timestamp || Date.now()
-    this.txInput = tx?.txInput || new TransactionInput()
     this.to = tx?.to || ""
+    this.txInput = tx?.txInput
+      ? new TransactionInput(tx?.txInput)
+      : new TransactionInput()
     this.hash = tx?.hash || this.getHash()
   }
 
   getHash() {
-    return SHA256(
-      this.type + this.txInput.getHash() + this.to + this.timestamp
-    ).toString()
+    const from = this.txInput ? this.txInput.getHash() : ""
+    return SHA256(this.type + from + this.to + this.timestamp).toString()
   }
 
   isValid() {

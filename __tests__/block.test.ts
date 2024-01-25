@@ -30,6 +30,7 @@ describe("Block tests", () => {
       transactions: [
         new Transaction({
           txInput: new TransactionInput(),
+          to: "toAddress",
         } as Transaction),
       ],
     } as Block)
@@ -43,6 +44,7 @@ describe("Block tests", () => {
       transactions: [
         new Transaction({
           txInput: new TransactionInput(),
+          to: "toAddress",
         } as Transaction),
       ],
       difficulty: 0,
@@ -88,6 +90,7 @@ describe("Block tests", () => {
       transactions: [
         new Transaction({
           txInput: new TransactionInput(),
+          to: "toAddress",
         } as Transaction),
       ],
     } as Block)
@@ -115,6 +118,7 @@ describe("Block tests", () => {
       transactions: [
         new Transaction({
           txInput: new TransactionInput(),
+          to: "toAddress",
         } as Transaction),
       ],
     } as Block)
@@ -126,10 +130,12 @@ describe("Block tests", () => {
     const block = new Block({
       index: 1,
       previousHash: genesis.hash,
-      transactions: [new Transaction({} as Transaction)],
+      transactions: [new Transaction({ to: "" } as Transaction)],
     } as Block)
+
     block.transactions[0].hash = "teste"
     block.mine(exampleDifficulty, exampleMiner)
+
     const valid = block.isValid(genesis.hash, genesis.index, exampleDifficulty)
     expect(valid.success).toBeFalsy()
   })
@@ -159,6 +165,7 @@ describe("Block tests", () => {
       transactions: [
         new Transaction({
           txInput: new TransactionInput(),
+          to: "toAddress",
         } as Transaction),
       ],
     } as Block)
@@ -173,6 +180,7 @@ describe("Block tests", () => {
       transactions: [
         new Transaction({
           txInput: new TransactionInput(),
+          to: "toAddress",
         } as Transaction),
       ],
     } as Block)
@@ -190,10 +198,12 @@ describe("Block tests", () => {
         new Transaction({
           type: TransactionType.FEE,
           txInput: new TransactionInput(),
+          to: "toAddress",
         } as Transaction),
         new Transaction({
           type: TransactionType.FEE,
           txInput: new TransactionInput(),
+          to: "toAddress",
         } as Transaction),
       ],
     } as Block)

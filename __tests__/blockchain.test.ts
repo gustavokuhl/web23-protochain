@@ -2,9 +2,11 @@ import { describe } from "@jest/globals"
 import Block from "../src/lib/block"
 import Blockchain from "../src/lib/blockchain"
 import Transaction from "../src/lib/transaction"
+import TransactionInput from "../src/lib/transactionInput"
 
 jest.mock("../src/lib/block")
 jest.mock("../src/lib/transaction")
+jest.mock("../src/lib/transactionInput")
 
 describe("Blockchain tests", () => {
   test("Should have genesis block", () => {
@@ -23,7 +25,9 @@ describe("Blockchain tests", () => {
       new Block({
         index: 1,
         previousHash: blockchain.blocks[0].hash,
-        transactions: [new Transaction({ data: "Bloco 2" } as Transaction)],
+        transactions: [
+          new Transaction({ txInput: new TransactionInput() } as Transaction),
+        ],
       } as Block)
     )
     expect(blockchain.isValid().success).toEqual(true)
@@ -32,7 +36,9 @@ describe("Blockchain tests", () => {
   test("Should NOT be valid", () => {
     const blockchain = new Blockchain()
 
-    const tx = new Transaction({ data: "tx1" } as Transaction)
+    const tx = new Transaction({
+      txInput: new TransactionInput(),
+    } as Transaction)
     blockchain.mempool.push(tx)
 
     blockchain.addBlock(
@@ -49,22 +55,21 @@ describe("Blockchain tests", () => {
 
   test("Should add transaction", () => {
     const blockchain = new Blockchain()
-    const tx = new Transaction({ data: "tx1", hash: "123" } as Transaction)
+
+    const tx = new Transaction({
+      txInput: new TransactionInput({ amount: 13 } as TransactionInput),
+    } as Transaction)
+
     const valid = blockchain.addTransaction(tx)
     expect(valid.success).toBeTruthy()
-  })
-
-  test("Should NOT add transaction (invalid data)", () => {
-    const blockchain = new Blockchain()
-    const tx = new Transaction({ hash: "123" } as Transaction)
-    const valid = blockchain.addTransaction(tx)
-    expect(valid.success).toBeFalsy()
   })
 
   test("Should NOT add transaction (duplicated in blockchain)", () => {
     const blockchain = new Blockchain()
 
-    const tx = new Transaction({ data: "tx1", hash: "123" } as Transaction)
+    const tx = new Transaction({
+      txInput: new TransactionInput(),
+    } as Transaction)
     blockchain.blocks.push(
       new Block({
         transactions: [tx],
@@ -78,17 +83,22 @@ describe("Blockchain tests", () => {
   test("Should NOT add transaction (duplicated in mempool)", () => {
     const blockchain = new Blockchain()
 
-    const tx = new Transaction({ data: "tx1", hash: "123" } as Transaction)
+    const tx = new Transaction({
+      txInput: new TransactionInput(),
+    } as Transaction)
     blockchain.mempool.push(tx)
 
     const result = blockchain.addTransaction(tx)
     expect(result.success).toBeFalsy()
   })
 
-  test("Should add transaction (mempool)", () => {
+  test("Should get transaction (blockchain)", () => {
     const blockchain = new Blockchain()
 
-    const tx = new Transaction({ data: "tx1", hash: "123" } as Transaction)
+    const tx = new Transaction({
+      hash: "xyz",
+      txInput: new TransactionInput(),
+    } as Transaction)
     blockchain.addTransaction(tx)
 
     const result = blockchain.getTransaction(tx.hash)
@@ -97,17 +107,10 @@ describe("Blockchain tests", () => {
 
   test("Should get transaction (blockchain)", () => {
     const blockchain = new Blockchain()
-
-    const tx = new Transaction({ data: "tx1", hash: "123" } as Transaction)
-    blockchain.addTransaction(tx)
-
-    const result = blockchain.getTransaction(tx.hash)
-    expect(result.mempoolIndex).toEqual(0)
-  })
-
-  test("Should get transaction (blockchain)", () => {
-    const blockchain = new Blockchain()
-    const tx = new Transaction({ data: "tx1", hash: "123" } as Transaction)
+    const tx = new Transaction({
+      hash: "xyz",
+      txInput: new TransactionInput(),
+    } as Transaction)
 
     blockchain.blocks.push(
       new Block({
@@ -129,7 +132,9 @@ describe("Blockchain tests", () => {
   test("Should add block", () => {
     const blockchain = new Blockchain()
 
-    const tx = new Transaction({ data: "Bloco 2" } as Transaction)
+    const tx = new Transaction({
+      txInput: new TransactionInput(),
+    } as Transaction)
     blockchain.mempool.push(tx)
 
     const result = blockchain.addBlock(
@@ -144,7 +149,9 @@ describe("Blockchain tests", () => {
 
   test("Should NOT add a block", () => {
     const blockchain = new Blockchain()
-    const tx = new Transaction({ data: "tx1" } as Transaction)
+    const tx = new Transaction({
+      txInput: new TransactionInput(),
+    } as Transaction)
     blockchain.mempool.push(tx)
 
     const result = blockchain.addBlock(
@@ -164,7 +171,9 @@ describe("Blockchain tests", () => {
 
   test("Should get next block info", () => {
     const blockchain = new Blockchain()
-    blockchain.mempool.push(new Transaction({ data: "tx1" } as Transaction))
+    blockchain.mempool.push(
+      new Transaction({ txInput: new TransactionInput() } as Transaction)
+    )
     const info = blockchain.getNextBlock()
     expect(info ? info.index : 0).toEqual(1)
   })
@@ -177,14 +186,23 @@ describe("Blockchain tests", () => {
 
   test("Should add transaction", () => {
     const blockchain = new Blockchain()
-    const tx = new Transaction({ data: "tx2", hash: "123" } as Transaction)
+
+    const tx = new Transaction({
+      hash: "xyz",
+      txInput: new TransactionInput(),
+    } as Transaction)
+
     const valid = blockchain.addTransaction(tx)
+    console.log(valid)
     expect(valid.success).toBeTruthy()
   })
 
   test("Should NOT add transaction (data)", () => {
     const blockchain = new Blockchain()
-    const tx = new Transaction({ hash: "123" } as Transaction)
+    const tx = new Transaction({
+      hash: "123",
+      txInput: new TransactionInput({ amount: -1 } as TransactionInput),
+    } as Transaction)
 
     const valid = blockchain.addTransaction(tx)
     expect(valid.success).toBeFalsy()
