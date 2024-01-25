@@ -194,7 +194,6 @@ describe("Blockchain tests", () => {
     } as Transaction)
 
     const valid = blockchain.addTransaction(tx)
-    console.log(valid)
     expect(valid.success).toBeTruthy()
   })
 
