@@ -88,6 +88,21 @@ describe("Blockchain tests", () => {
     const tx = new Transaction({
       txInput: new TransactionInput(),
       hash: "xyz",
+      to: "toAddress",
+    } as Transaction)
+    blockchain.mempool.push(tx)
+
+    const result = blockchain.addTransaction(tx)
+    expect(result.success).toBeFalsy()
+  })
+
+  test("Should NOT add transaction (duplicated in block)", () => {
+    const blockchain = new Blockchain()
+
+    const tx = new Transaction({
+      txInput: new TransactionInput(),
+      hash: "abc",
+      to: "toAddress",
     } as Transaction)
     blockchain.mempool.push(tx)
 
